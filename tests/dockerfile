@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-# Install OS dependencies required for Chromium at runtime
+# Install OS dependencies required for Chromium + Node.js
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         curl gnupg wget ca-certificates \
@@ -26,9 +26,14 @@ RUN apt-get update && \
         libpango-1.0-0 \
         libgtk-3-0 \
         libharfbuzz0b \
-        libfribidi0 && \
+        libfribidi0 \
+        software-properties-common && \
+    # Install Node.js + npm (required by RobotFramework Browser)
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Set working directory
 WORKDIR /app
 
 # Install Python dependencies
@@ -36,13 +41,14 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install RobotFramework Browser library
-RUN pip install robotframework-browser
+RUN pip install --no-cache-dir robotframework-browser
 
-# Copy tests
+# Copy your Robot tests
 COPY ./*.robot ./
 
 # Copy runtime chromium install script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+# ENTRYPOINT will install Chromium + init browser + run tests
 ENTRYPOINT ["/entrypoint.sh"]
