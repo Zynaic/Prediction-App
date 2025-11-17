@@ -26,29 +26,26 @@ RUN apt-get update && \
         libpango-1.0-0 \
         libgtk-3-0 \
         libharfbuzz0b \
-        libfribidi0 \
-        software-properties-common && \
-    # Install Node.js + npm (required by RobotFramework Browser)
+        libfribidi0 && \
+    # Install Node.js + npm (NodeSource script works on Debian Trixie)
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
 WORKDIR /app
 
 # Install Python dependencies
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install RobotFramework Browser library
+# Install Robot Framework Browser
 RUN pip install --no-cache-dir robotframework-browser
 
-# Copy your Robot tests
+# Copy tests
 COPY ./*.robot ./
 
-# Copy runtime chromium install script
+# Entrypoint to install Chromium + init browser + run tests
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# ENTRYPOINT will install Chromium + init browser + run tests
 ENTRYPOINT ["/entrypoint.sh"]
