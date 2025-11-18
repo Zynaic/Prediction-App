@@ -18,4 +18,3 @@ services:
 
 networks:
   prediction-network:
-  driver: bridge
