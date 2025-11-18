@@ -41,8 +41,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Install Robot Framework Browser
 RUN pip install --no-cache-dir robotframework-browser
 
-# Copy tests
+# Copy tests and resource
 COPY ./*.robot ./
+COPY ./resource.resource ./
+
 
 # Entrypoint to install Chromium + init browser + run tests
 COPY entrypoint.sh /entrypoint.sh
