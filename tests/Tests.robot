@@ -10,7 +10,7 @@ Test Complete Matchday loading
     [Documentation]    Matchday loads completely
     Select UCFL League
     Get Matchday Count
-    Should Be Equal As Integers    ${MATCH_COUNT}    18
+    Should Be Equal As Integers    {MATCH_COUNT}    18
 
 League Table Updates Correctly
     [Tags]             Regression

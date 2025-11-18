@@ -42,7 +42,6 @@ Get Matchday Count
     ${match_count}=    Evaluate    ${input_count} / 2
     Log    Found ${match_count} matches in this matchday
     Set Global Variable    ${MATCH_COUNT}    ${match_count}
-    RETURN    ${match_count}
 
 Fill Predictions With Random Scores
     [Documentation]    Fill all prediction inputs with scores between 0-3
